@@ -1,0 +1,2 @@
+# SpaceApi-Connector for MQTT servers
+This is intended to be used as a connector between the [SpaceApi-Server](https://github.com/vspaceone/SpaceAPI-Server) and a MQTT server to forward information like space status or sensor data to the SpaceApi.

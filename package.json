@@ -1,0 +1,16 @@
+{
+  "name": "mqttspaceapiconnector",
+  "version": "1.0.0",
+  "description": "Connects a MQTT server to the SpaceApi-Server",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node main.js"
+  },
+  "author": "Damian Jesionek",
+  "license": "MIT",
+  "dependencies": {
+    "mqtt": "^2.15.1",
+    "unirest": "^0.5.1"
+  }
+}
