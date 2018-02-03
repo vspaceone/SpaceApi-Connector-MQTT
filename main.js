@@ -1,26 +1,30 @@
-var mqtt_id = "SpaceApi-Connector"
-var mqtt_server = "192.168.178.123";
-var mqtt_user = "";
-var mqtt_password = "";
-
-var spaceapi_server = "http://localhost:8080"
-var spaceapi_token = "P3cqlyXovqwXx0TVICHSdSHqKHyXOXYrPslpR6fq5dctwug_uWdkiXaQnSz0IHYhDUCLVZUhKJU2utfo2wqpBA"
-
+// ##############################
+// Requires
+// ##############################
 var mqtt = require('mqtt')
-var client = mqtt.connect('mqtt://' + mqtt_server, {
-    clientId: mqtt_id,
-    username: mqtt_user,
-    password: mqtt_password
-})
-
 var unirest = require('unirest');
+var config = require('config');
+
+// ##############################
+// Functions
+// ##############################
 
 function sendSpaceapiUpdate(api) {
-    unirest.post(spaceapi_server + "/spaceapi")
-        .headers({'X-Auth-Token': spaceapi_token, 'Content-Type': 'application/json'})
+    unirest.post(config.get('spaceapi.server') + "/spaceapi")
+        .headers({'X-Auth-Token': config.get('spaceapi.token'), 'Content-Type': 'application/json'})
         .send(JSON.stringify(api))
         .end()
 }
+
+// ##############################
+// "Main"
+// ##############################
+
+var client = mqtt.connect('mqtt://' + config.get('mqtt.server'), {
+    clientId: config.get('mqtt.id'),
+    username: config.get('mqtt.user'),
+    password: config.get('mqtt.password')
+})
 
 client.on('connect', function(){
     client.subscribe('vspace/one/state/open')
@@ -28,10 +32,9 @@ client.on('connect', function(){
 
 client.on('message', function (topic, buf){
     message = JSON.parse(buf)
+    console.log(message)
 
-    if (topic == 'vspace/one/state/open'){        
-        console.log(message)
-
+    if (topic == 'vspace/one/state/open' && message.status == 'ok'){      
         sendSpaceapiUpdate({
             state:{
                 open: message.data.open,
