@@ -17,8 +17,28 @@ config/default.json
         "server": "SpaceAPI-Server address",
         "token": "token created by your SpaceAPI-Server",
         "topics": {
-            "state": "topic to listen for state changes"
+            "state": "topic to listen for state changes",
+            "temperature": "topic to listen for temperature sensor data",
+            "humidity": "topic to listen for humidity sensor data"
         }
+    }
+}
+```
+
+## Messages
+This connector expects messages in json format with following structure (additional data is ignored):
+
+```
+{
+    "status":"ok"|"error",
+    "error":"Description"   // When status is "error"
+    "data":{                // When status is "ok"
+        // When topic is about state
+        "open":true|false,
+        // When topic is about sensor data
+        "value":123,
+        "unit":"°C",
+        "location":"RoomX"
     }
 }
 ```

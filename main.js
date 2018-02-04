@@ -28,6 +28,8 @@ var client = mqtt.connect('mqtt://' + config.get('mqtt.server'), {
 
 client.on('connect', function(){
     client.subscribe(config.get('spaceapi.topics.state'))
+    client.subscribe(config.get('spaceapi.topics.sensor.temperature'))
+    client.subscribe(config.get('spaceapi.topics.sensor.humidity'))
 })
 
 client.on('message', function (topic, buf){
@@ -39,6 +41,26 @@ client.on('message', function (topic, buf){
             state:{
                 open: message.data.open,
                 lastchange: Date.now()
+            }
+        })
+    } else if (topic == config.get('spaceapi.topics.sensor.temperature') && message.status == 'ok'){      
+        sendSpaceapiUpdate({
+            sensors:{
+                temperature: [{
+                    value: message.data.value,
+                    unit: message.data.unit,
+                    location: message.data.location
+                }]
+            }
+        })
+    } else if (topic == config.get('spaceapi.topics.sensor.humidity') && message.status == 'ok'){      
+        sendSpaceapiUpdate({
+            sensors:{
+                humidity: [{
+                    value: message.data.value,
+                    unit: message.data.unit,
+                    location: message.data.location
+                }]
             }
         })
     }
