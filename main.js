@@ -27,14 +27,14 @@ var client = mqtt.connect('mqtt://' + config.get('mqtt.server'), {
 })
 
 client.on('connect', function(){
-    client.subscribe('vspace/one/state/open')
+    client.subscribe(config.get('spaceapi.topics.state'))
 })
 
 client.on('message', function (topic, buf){
     message = JSON.parse(buf)
     console.log(message)
 
-    if (topic == 'vspace/one/state/open' && message.status == 'ok'){      
+    if (topic == config.get('spaceapi.topics.state') && message.status == 'ok'){      
         sendSpaceapiUpdate({
             state:{
                 open: message.data.open,
