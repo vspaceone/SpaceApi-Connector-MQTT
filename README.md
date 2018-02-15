@@ -19,26 +19,62 @@ config/default.json
         "topics": {
             "state": "topic to listen for state changes",
             "temperature": "topic to listen for temperature sensor data",
-            "humidity": "topic to listen for humidity sensor data"
+            "humidity": "topic to listen for humidity sensor data",
+            "spaceapi": "topic to listen for spaceapi publication and to publish requests"
         }
     }
 }
 ```
 
 ## Messages
-This connector expects messages in json format with following structure (additional data is ignored):
+This connector expects messages in json format structured like following examples (additional data is ignored).
 
+### Error (all topics)
 ```
 {
-    "status":"ok"|"error",
+    "status":"error",
     "error":"Description"   // When status is "error"
-    "data":{                // When status is "ok"
-        // When topic is about state
-        "open":true|false,
-        // When topic is about sensor data
+}
+```
+### Topic "state"
+```
+{
+    "status":"ok",
+    "data":{                
+        "open":true         // true if open, false otherwise 
+    }
+}
+```
+### Topic "temperature" or "humidity"
+```
+{
+    "status":"ok",
+    "data":{
         "value":123,
-        "unit":"°C",
+        "unit":"°C or F or %",
         "location":"RoomX"
+    }
+}
+```
+### Topic "state"
+To request spaceapi data:
+```
+{
+    "status":"ok",
+    "data":{                
+        "type":"request"
+    }
+}
+```
+Response that will be published after this request:
+```
+{
+    "status":"ok",
+    "data":{
+        "type":"request",                
+        "spaceapi":{
+            // Full SpaceAPI-string 
+        }
     }
 }
 ```
