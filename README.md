@@ -56,24 +56,27 @@ This connector expects messages in json format structured like following example
     }
 }
 ```
-### Topic "state"
-To request spaceapi data:
+### Topic "request"
+To request a specific value from spaceapi the request field should 
+include the specified spaceapi topic followed by the JSON like (dot notation) value from spaceapi:
 ```
 {
     "status":"ok",
     "data":{                
-        "type":"request"
+        "request":"spaceapi/topic.specific.spaceapi.value"
     }
 }
 ```
-Response that will be published after this request:
+
+Example for a response that will be published after the request "spaceapi/topic.state.open":
 ```
 {
     "status":"ok",
     "data":{
         "type":"request",                
         "spaceapi":{
-            // Full SpaceAPI-string 
+            "request": "spaceapi/topic.state.open",
+            "response": true
         }
     }
 }
