@@ -81,7 +81,8 @@ client.on('message', function (ttopic, buf){
         return;
     }
 
-    if (topic == config.get('spaceapi.topics.state')){      
+    if (topic == config.get('spaceapi.topics.state')){
+        //console.log("Sending to SpaceAPI")
         sendSpaceapiUpdate({
             state:{
                 open: message.data.open,
